@@ -36,25 +36,33 @@ class SearchPage extends Component {
     });
     return ret;
   }
-
-  renderListView() {
+  renderSearchResultListView() {
     let contact = this.searchContact();
     let dataSource = this.state.dataSource.cloneWithRows(contact);
 
     let dataSource1 = this.state.dataSource.cloneWithRows(this.props.searchResult);
-    return (
-      <View style={styles.container}>
+    if (this.props.flagShowContact) {
+      return (
+        <ListView
+          style={styles.listview}
+          dataSource={dataSource}
+          renderRow={(item, sectionID, rowID)=>this.renderContactRow(item, sectionID, rowID)}
+        />
+      )
+    } else {
+      return (
         <ListView
           style={styles.listview}
           dataSource={dataSource1}
           renderRow={(item, sectionID, rowID)=>this.renderSearchResultRow(item, sectionID, rowID)}
         />
-        {this.props.flagShowContact && <ListView
-          style={styles.listview}
-          dataSource={dataSource}
-          renderRow={(item, sectionID, rowID)=>this.renderContactRow(item, sectionID, rowID)}
-        />}
-
+      )
+    }
+  }
+  renderListView() {
+    return (
+      <View style={styles.container}>
+        {this.renderSearchResultListView()}
       </View>
     );
   }
